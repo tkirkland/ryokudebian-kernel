@@ -29,7 +29,9 @@ have=$(gh release view "$rel" --json assets -q '.assets | map(select(.state == "
 [[ $have -eq $want ]] || { echo "$rel has $have/$want assets, not pruning" >&2; exit 1; }
 v=$(variant "$rel")
 gh release list --limit 200 --json tagName -q '.[].tagName' | grep -- '-zfs-' |
-  while read -r t; do [[ $(variant "$t") == "$v" ]] && printf '%s\t%s\n' "$(sortkey "$t")" "$t"; done |
+  while read -r t; do
+    if [[ $(variant "$t") == "$v" ]]; then printf '%s\t%s\n' "$(sortkey "$t")" "$t"; fi
+  done |
   sort -t$'\t' -k1,1rV | cut -f2 | tail -n +"$((KEEP + 1))" |
   while read -r old; do
     echo "deleting $old (variant $v keeps $KEEP)"
