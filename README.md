@@ -5,13 +5,15 @@ Kernels for Ryoku Debian (the Ryoku port to Debian), each with OpenZFS compiled 
 headers debs and the matching ZFS userland tarball. A root-on-ZFS machine that
 installs only these kernels can never boot a kernel that has no ZFS.
 
-Three variants:
+Two variants are built here:
 
 - **Debian 6.x**: Debian's own 6.12 kernel (trixie), built from Debian's
   source package;
 - **Debian 7.x**: Debian's own newest 7.x kernel (forky/sid) that OpenZFS
-  supports, built from Debian's source package;
-- **CachyOS**: the CachyOS kernel (`-cachyos` debs), being added next.
+  supports, built from Debian's source package.
+
+The third Ryoku Debian kernel, CachyOS (`-cachyos` debs), is built in
+[tkirkland/ryokudebian-kernel-cachyos](https://github.com/tkirkland/ryokudebian-kernel-cachyos).
 
 Each variant keeps its current and previous release (see "Which versions get built").
 
@@ -54,13 +56,12 @@ Only plain revisions (`6.12.113-1`) count. A version that already has a
 release is skipped.
 
 The repo keeps the newest two releases of each variant: current plus previous,
-so there's always something to roll back to. A variant is the kernel's major
-version plus any word label in the tag, regardless of the other version
-numbers: `6.12.113-1-zfs-2.4.4` is `6`, `7.2.11-1-zfs-2.4.4` is `7`, and a tag
-like `7.2.11-cachyos-zfs-2.4.4` would be `7-cachyos`. Within a variant,
-releases are ordered by version (a missing Debian revision counts as `-0`).
-Once a new release has all its assets uploaded, `prune.sh` deletes the older
-ones along with their git tags. A failed build never prunes anything.
+so there's always something to roll back to. There are two variants, set by
+line and not by version number: `6.12` (trixie) and `newest` (7.x today; when
+it moves to 8.x, the old 7.x releases count as its previous ones). Within a
+variant, releases are ordered by version (a missing Debian revision counts as
+`-0`). Once a new release has all its assets uploaded, `prune.sh` deletes the
+older ones along with their git tags. A failed build never prunes anything.
 `KEEP=<n>` changes the count.
 
 **Lag.** A kernel.org point release shows up here only after Debian has

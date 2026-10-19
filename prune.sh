@@ -7,16 +7,10 @@
 set -euo pipefail
 KEEP=${KEEP:-2}
 
-# Variant = major version + any word label, ignoring the rest of the version,
-# the Debian revision and the zfs tag: 6.12.113-1-zfs-2.4.4 and
-# 6.12.111-zfs-2.4.4 -> 6; 7.2.11-1-zfs-2.4.4 -> 7; 7.2.11-cachyos-zfs-2.4.4
-# or cachyos-7.2.11-1-zfs-2.4.4 -> 7-cachyos.
-variant() {
-  local t=${1%%-zfs-*} major words
-  major=$(grep -oE '[0-9]+' <<<"$t" | head -1)
-  words=$(grep -oE '[A-Za-z]+' <<<"$t" | tr '\n' '-' || true)
-  echo "${major}${words:+-${words%-}}"
-}
+# Variant, regardless of version numbers: trixie's 6.12 line, or the newest
+# line (7.x today, 8.x later; a new major must not strand the old ones).
+variant() { [[ $1 == 6.12[.-]* ]] && echo 6.12 || echo newest; }
+
 # Version-ordered sort key: labels dropped, a missing Debian revision counts
 # as -0, so old-style 6.12.113-zfs-* sorts below 6.12.113-1-zfs-*.
 sortkey() {
