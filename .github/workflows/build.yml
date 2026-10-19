@@ -42,7 +42,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release create "${{ matrix.rel }}" out/* \
-            --title "Linux ${{ matrix.dver }} (Debian) + ${{ needs.plan.outputs.zfs }} (builtin)" \
+            --title "Ryoku kernel: Debian ${{ matrix.dver }} + ${{ needs.plan.outputs.zfs }} (builtin)" \
             --notes "Debian's kernel ${{ matrix.dver }} (built from Debian source package linux ${{ matrix.dver }} with its own amd64 config) with OpenZFS ${{ needs.plan.outputs.zfs }} compiled in (CONFIG_ZFS=y), image + headers debs, and the matching ZFS userland tarball."
       # Keep current + previous release of this variant; prune.sh refuses
       # unless every built file is uploaded, so a failed build never prunes.

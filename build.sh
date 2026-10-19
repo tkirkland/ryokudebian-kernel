@@ -8,7 +8,7 @@
 # Usage: build.sh <Debian version, e.g. 6.12.113-1> <zfs tag> <outdir>
 set -euo pipefail
 DVER=$1 ZFS_TAG=$2 OUT=$3
-LOCALVERSION=-stripped
+LOCALVERSION=-ryoku
 W=/build KSRC=/build/linux ZSRC=/build/zfs DPKG=/build/debian-pkg
 mkdir -p "$W" "$OUT"
 

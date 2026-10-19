@@ -1,13 +1,23 @@
-# hyprdebian-kernel
+# ryoku-kernel
 
-Debian's kernel with OpenZFS compiled in (`CONFIG_ZFS=y`, no module, no dkms),
-published as GitHub Releases: image + headers debs and the matching ZFS
-userland tarball. A root-on-ZFS machine that installs only these kernels can
-never boot a kernel that has no ZFS.
+Kernels for the Ryoku port to Debian, each with OpenZFS compiled in
+(`CONFIG_ZFS=y`, no module, no dkms), published as GitHub Releases: image +
+headers debs and the matching ZFS userland tarball. A root-on-ZFS machine that
+installs only these kernels can never boot a kernel that has no ZFS.
+
+Three variants:
+
+- **Debian 6.x**: Debian's own 6.12 kernel (trixie), built from Debian's
+  source package;
+- **Debian 7.x**: Debian's own newest 7.x kernel (forky/sid) that OpenZFS
+  supports, built from Debian's source package;
+- **CachyOS**: the CachyOS-patched kernel (being added next).
+
+Each variant keeps its current and previous release (see "Which versions get built").
 
 ## What gets built
 
-Each release is Debian's own `linux` source package for one version, rebuilt
+Each Debian release is Debian's own `linux` source package for one version, rebuilt
 like this (`build.sh`):
 
 1. fetch `linux_<version>.dsc` and its files from Debian's main or security
@@ -24,7 +34,7 @@ are both in the final config. Lockdown under Secure Boot comes from Debian's
 patches; a plain kernel.org kernel doesn't have it.
 
 Differences from Debian's own binary package: no debug info (so no BTF), no Debian signing
-certs in the trusted keyring, `LOCALVERSION=-stripped`, and ZFS built in.
+certs in the trusted keyring, `LOCALVERSION=-ryoku`, and ZFS built in.
 In-tree modules are signed with a throwaway key that the build generates and
 that is gone when the container exits. Debian's build does the same. The build
 fails if that private key ends up in a deb. This CI signs nothing else and
@@ -63,18 +73,11 @@ sooner, run the workflow by hand once Debian has published it.
 ## Naming
 
 - Release tag: `<debian version>-<zfs tag>`, for example `6.12.113-1-zfs-2.4.4`.
-- Packages: `linux-image-<upstream>-stripped` and `linux-headers-<upstream>-stripped`,
-  the same names as before. Package version: `<debian version>-zfs<zfs version>`,
-  for example `6.12.113-1-zfs2.4.4`. It sorts above the older `6.12.111-zfs2.4.4`
-  form. A new Debian revision or a newer ZFS on the same kernel also sorts as an
-  upgrade.
-
-**Break for consumers that match release tags:** releases before this change
-were tagged `<upstream>-<zfs tag>` (`6.12.111-zfs-2.4.4`). The Debian revision
-now sits between the version and `-zfs-`. A tag regex like
-`^6\.12\.[0-9.]+-zfs-` (debian13-stripped `build-rootfs.sh`) no longer matches
-new releases, so it quietly keeps picking the last old-style one. Allow an
-optional `-<rev>`, for example `^6\.12\.[0-9.]+(-[0-9]+)?-zfs-`.
+- Packages: `linux-image-<upstream>-ryoku` and `linux-headers-<upstream>-ryoku`,
+  for example `linux-image-6.12.113-ryoku`. The `-ryoku` suffix keeps them
+  from colliding with other self-built kernel debs. Package version:
+  `<debian version>-zfs<zfs version>`, for example `6.12.113-1-zfs2.4.4`, so a
+  new Debian revision or a newer ZFS on the same kernel sorts as an upgrade.
 
 ## Running a build locally
 
