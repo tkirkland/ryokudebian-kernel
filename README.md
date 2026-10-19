@@ -1,6 +1,6 @@
-# ryoku-kernel
+# ryokudebian-kernel
 
-Kernels for the Ryoku port to Debian, each with OpenZFS compiled in
+Kernels for Ryoku Debian (the Ryoku port to Debian), each with OpenZFS compiled in
 (`CONFIG_ZFS=y`, no module, no dkms), published as GitHub Releases: image +
 headers debs and the matching ZFS userland tarball. A root-on-ZFS machine that
 installs only these kernels can never boot a kernel that has no ZFS.
@@ -11,7 +11,7 @@ Three variants:
   source package;
 - **Debian 7.x**: Debian's own newest 7.x kernel (forky/sid) that OpenZFS
   supports, built from Debian's source package;
-- **CachyOS**: the CachyOS-patched kernel (being added next).
+- **CachyOS**: the CachyOS kernel (`-cachyos` debs), being added next.
 
 Each variant keeps its current and previous release (see "Which versions get built").
 
@@ -34,7 +34,7 @@ are both in the final config. Lockdown under Secure Boot comes from Debian's
 patches; a plain kernel.org kernel doesn't have it.
 
 Differences from Debian's own binary package: no debug info (so no BTF), no Debian signing
-certs in the trusted keyring, `LOCALVERSION=-ryoku`, and ZFS built in.
+certs in the trusted keyring, `LOCALVERSION=-ryokudebian`, and ZFS built in.
 In-tree modules are signed with a throwaway key that the build generates and
 that is gone when the container exits. Debian's build does the same. The build
 fails if that private key ends up in a deb. This CI signs nothing else and
@@ -73,8 +73,8 @@ sooner, run the workflow by hand once Debian has published it.
 ## Naming
 
 - Release tag: `<debian version>-<zfs tag>`, for example `6.12.113-1-zfs-2.4.4`.
-- Packages: `linux-image-<upstream>-ryoku` and `linux-headers-<upstream>-ryoku`,
-  for example `linux-image-6.12.113-ryoku`. The `-ryoku` suffix keeps them
+- Packages: `linux-image-<upstream>-ryokudebian` and `linux-headers-<upstream>-ryokudebian`,
+  for example `linux-image-6.12.113-ryokudebian`. The `-ryokudebian` suffix keeps them
   from colliding with other self-built kernel debs. Package version:
   `<debian version>-zfs<zfs version>`, for example `6.12.113-1-zfs2.4.4`, so a
   new Debian revision or a newer ZFS on the same kernel sorts as an upgrade.
